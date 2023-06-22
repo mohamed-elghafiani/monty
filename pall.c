@@ -5,19 +5,19 @@
  * pall - a function prints all the values on the stack,
  *	starting from the top of the stack
  *
- * @head: a pointer to the first element in the stack
+ * @stack: a pointer to the first element in the stack
  * Return: Nothing
  */
-void pall(stack_t *head)
+void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
-	if (!head)
+	if (!*stack)
 	{
 		return;
 	}
-	while (head->next)
+	while ((*stack)->next)
 	{
-		printf("%d\n", head->n);
-		head = head->next;
+		printf("%d\n", (*stack)->n);
+		*stack = (*stack)->next;
 	}
-	printf("%d\n", head->n);
+	printf("%d\n", (*stack)->n);
 }

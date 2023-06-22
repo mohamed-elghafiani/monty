@@ -16,6 +16,10 @@ void free_stack(stack_t *head)
 	{
 		tmp = head;
 		head = head->next;
+		if (tmp->prev)
+		{
+			free(tmp->prev);
+		}
 		free(tmp);
 	}
 }

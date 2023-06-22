@@ -4,6 +4,8 @@
 #include "monty.h"
 #define BUFFER_SIZE 10
 
+int node_integer;
+
 /**
  * main - main dunction of the program
  *
@@ -15,8 +17,9 @@
 int main(int argc, char **argv)
 {
 	stack_t *stack = NULL;
-	int n = 10;
-	char line[BUFFER_SIZE], opcode[5] = "FFFF", argument[100];
+	instruction_t instructions[] = {{"push", push}, {"pall", pall}, {NULL, NULL}};
+	char line[BUFFER_SIZE], opcode[10], argument[100];
+	int i = 0;
 	FILE *file;
 
 	if (argc != 2)
@@ -32,24 +35,20 @@ int main(int argc, char **argv)
 	}
 	while (fgets(line, 10, file))
 	{
-		if (sscanf(line, " %s %s", opcode, argument) == 2)
+		sscanf(line, " %s %s", opcode, argument);
+		node_integer = atoi(argument);
+
+		while (instructions[i].opcode != NULL)
 		{
-			n = atoi(argument);
-			if (push(&stack, n) == -1)
+			if (strcmp(opcode, instructions[i].opcode) == 0)
 			{
-				fprintf(stderr, "Error: malloc failed\n");
-				exit(EXIT_FAILURE);
+				instructions[i].f(&stack, __LINE__);
+				break;
 			}
+			i++;
 		}
-		if (!n && strcmp(opcode, "push") == 0)
-		{
-			fprintf(stderr, "L%d: usage: push integer\n", __LINE__);
-			exit(EXIT_FAILURE);
-		}
-		else if (strcmp(opcode, "pall") == 0)
-		{
-			pall(stack);
-		}
+		memset(opcode, 0, 10);
+		i = 0;
 	}
 	free_stack(stack);
 	fclose(file);

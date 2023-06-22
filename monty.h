@@ -32,9 +32,13 @@ typedef struct instruction_s
 } instruction_t;
 
 
-int push(stack_t **head, const int n);
+/* Global variables */
+extern int node_integer;
 
-void pall(stack_t *head);
+/* functions signatures */
+void push(stack_t **stack, unsigned int line_number);
+
+void pall(stack_t **stack, unsigned int line_number);
 
 void free_stack(stack_t *head);
 
