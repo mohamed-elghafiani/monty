@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 {
 	stack_t *stack = NULL;
 	int n = 10;
-	char line[BUFFER_SIZE], opcode[5] = "FFFF", argument[2];
+	char line[BUFFER_SIZE], opcode[5] = "FFFF", argument[100];
 	FILE *file;
 
 	if (argc != 2)
