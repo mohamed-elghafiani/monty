@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	stack_t *stack = NULL;
 	instruction_t instructions[] = {{"push", push}, {"pall", pall}, {NULL, NULL}};
 	char line[BUFFER_SIZE], opcode[10], argument[100];
-	int i = 0, inst_found = 0, scans = 0;
+	unsigned int i = 0, inst_found = 0, scans = 0, n = 1;
 	FILE *file;
 
 	if (argc != 2)
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 			{
 				if (strcmp(opcode, instructions[i].opcode) == 0)
 				{
-					instructions[i].f(&stack, __LINE__);
+					instructions[i].f(&stack, n);
 					inst_found = 1;
 					break;
 				}
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 			}
 			if (inst_found == 0)
 			{
-				fprintf(stderr, "L%d: unknown instruction %s\n", __LINE__, opcode);
+				fprintf(stderr, "L%d: unknown instruction %s\n", n, opcode);
 				free_stack(stack);
 				fclose(file);
 				exit(EXIT_FAILURE);
@@ -60,6 +60,7 @@ int main(int argc, char **argv)
 			i = 0;
 			inst_found = 0;
 		}
+		n++;
 	}
 	free_stack(stack);
 	fclose(file);
