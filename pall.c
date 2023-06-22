@@ -6,6 +6,7 @@
  *	starting from the top of the stack
  *
  * @stack: a pointer to the first element in the stack
+ * @line_number: the line number where the function gets called
  * Return: Nothing
  */
 void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)

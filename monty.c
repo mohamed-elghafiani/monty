@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	stack_t *stack = NULL;
 	instruction_t instructions[] = {{"push", push}, {"pall", pall}, {NULL, NULL}};
 	char line[BUFFER_SIZE], opcode[10], argument[100];
-	int i = 0;
+	int i = 0, inst_found = 0, scans = 0;
 	FILE *file;
 
 	if (argc != 2)
@@ -35,20 +35,31 @@ int main(int argc, char **argv)
 	}
 	while (fgets(line, 10, file))
 	{
-		sscanf(line, " %s %s", opcode, argument);
+		scans = sscanf(line, " %s %s", opcode, argument);
 		node_integer = atoi(argument);
-
-		while (instructions[i].opcode != NULL)
+		if (scans >= 1)
 		{
-			if (strcmp(opcode, instructions[i].opcode) == 0)
+			while (instructions[i].opcode != NULL)
 			{
-				instructions[i].f(&stack, __LINE__);
-				break;
+				if (strcmp(opcode, instructions[i].opcode) == 0)
+				{
+					instructions[i].f(&stack, __LINE__);
+					inst_found = 1;
+					break;
+				}
+				i++;
 			}
-			i++;
+			if (inst_found == 0)
+			{
+				fprintf(stderr, "L%d: unknown instruction %s\n", __LINE__, opcode);
+				free_stack(stack);
+				fclose(file);
+				exit(EXIT_FAILURE);
+			}
+			memset(opcode, 0, 10);
+			i = 0;
+			inst_found = 0;
 		}
-		memset(opcode, 0, 10);
-		i = 0;
 	}
 	free_stack(stack);
 	fclose(file);

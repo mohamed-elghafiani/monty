@@ -2,9 +2,9 @@
 #include "monty.h"
 
 /**
- * free_dlistint - a function that frees a dlistint_t list
+ * free_stack - a function that frees the stack
  *
- * @head: a pointer to the head of the dlistint_t list
+ * @head: a pointer to the first element in the stack
  * Return: Nothing
  */
 
