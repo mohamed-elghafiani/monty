@@ -17,7 +17,7 @@ int node_integer;
 int main(int argc, char **argv)
 {
 	stack_t *stack = NULL;
-	instruction_t instructions[] = {{"push", push}, {"pall", pall}, {NULL, NULL}};
+	instruction_t instructions[] = {{"push", push}, {"pall", pall}, {"pint", pint}, {NULL, NULL}};
 	char line[BUFFER_SIZE], opcode[10] = {0}, argument[10] = {0};
 	unsigned int i = 0, inst_found = 0, scans = 0, n = 1;
 	FILE *file;
