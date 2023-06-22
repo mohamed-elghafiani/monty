@@ -3,7 +3,7 @@
 
 /**
  * pall - a function prints all the values on the stack,
- * 	starting from the top of the stack
+ *	starting from the top of the stack
  *
  * @head: a pointer to the first element in the stack
  * Return: Nothing

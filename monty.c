@@ -7,6 +7,8 @@
 /**
  * main - main dunction of the program
  *
+ * @argc: # of arguments passed
+ * @argv: arguments vector
  * Return: Nothing
  */
 
