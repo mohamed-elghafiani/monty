@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 {
 	stack_t *stack = NULL;
 	instruction_t instructions[] = {{"push", push}, {"pall", pall}, {NULL, NULL}};
-	char line[BUFFER_SIZE], opcode[10], argument[100];
+	char line[BUFFER_SIZE], opcode[10] = {0}, argument[10] = {0};
 	unsigned int i = 0, inst_found = 0, scans = 0, n = 1;
 	FILE *file;
 
@@ -36,7 +36,11 @@ int main(int argc, char **argv)
 	while (fgets(line, 10, file))
 	{
 		scans = sscanf(line, " %s %s", opcode, argument);
-		node_integer = atoi(argument);
+		if (strlen(argument) > 0)
+		{
+
+			node_integer = atoi(argument);
+		}
 		if (scans >= 1)
 		{
 			while (instructions[i].opcode != NULL)
@@ -57,6 +61,7 @@ int main(int argc, char **argv)
 				exit(EXIT_FAILURE);
 			}
 			memset(opcode, 0, 10);
+			memset(argument, 0, 10);
 			i = 0;
 			inst_found = 0;
 		}
