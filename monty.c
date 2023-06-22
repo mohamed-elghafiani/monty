@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 {
 	stack_t *stack = NULL;
 	int n = 10;
-	char line[BUFFER_SIZE], *opcode;
+	char line[BUFFER_SIZE], opcode[5] = "FFFF", argument[2];
 	FILE *file;
 
 	if (argc != 2)
@@ -27,23 +27,22 @@ int main(int argc, char **argv)
 	file = fopen(argv[1], "r");
 	while (fgets(line, 10, file))
 	{
-		opcode = strtok(line, " ");
-		if (strcmp(opcode, "push") == 0)
+		if (sscanf(line, " %s %s", opcode, argument) == 2)
 		{
-			n = atoi(strtok(NULL, " "));
-			if (!n)
-			{
-				fprintf(stderr, "L%d: usage: push integer\n", __LINE__);
-				exit(EXIT_FAILURE);
-			}
-			stack = push(&stack, n);
+			n = atoi(argument);
+			push(&stack, n);
 		}
-		else if (strcmp(opcode, "pall"))
+		if (!n && strcmp(opcode, "push") == 0)
+		{
+			fprintf(stderr, "L%d: usage: push integer\n", __LINE__);
+			exit(EXIT_FAILURE);
+		}
+		else if (strcmp(opcode, "pall") == 0)
 		{
 			pall(stack);
 		}
 	}
-
+	free_stack(stack);
 	fclose(file);
 	return (0);
 }
