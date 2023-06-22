@@ -25,12 +25,21 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	file = fopen(argv[1], "r");
+	if (!file)
+	{
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		exit(EXIT_FAILURE);
+	}
 	while (fgets(line, 10, file))
 	{
 		if (sscanf(line, " %s %s", opcode, argument) == 2)
 		{
 			n = atoi(argument);
-			push(&stack, n);
+			if (push(&stack, n) == -1)
+			{
+				fprintf(stderr, "Error: malloc failed\n");
+				exit(EXIT_FAILURE);
+			}
 		}
 		if (!n && strcmp(opcode, "push") == 0)
 		{

@@ -32,7 +32,7 @@ typedef struct instruction_s
 } instruction_t;
 
 
-void push(stack_t **head, const int n);
+int push(stack_t **head, const int n);
 
 void pall(stack_t *head);
 
