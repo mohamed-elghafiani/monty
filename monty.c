@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "monty.h"
-#define BUFFER_SIZE 10
+#define MAX_BUFFER_SIZE 256
 
 int node_integer;
 
@@ -17,8 +17,9 @@ int node_integer;
 int main(int argc, char **argv)
 {
 	stack_t *stack = NULL;
-	instruction_t instructions[] = {{"push", push}, {"pall", pall}, {"pint", pint}, {NULL, NULL}};
-	char line[BUFFER_SIZE], opcode[10] = {0}, argument[10] = {0};
+	instruction_t instructions[] = {{"push", push}, {"pall", pall},
+		{"pint", pint}, {"pop", pop}, {NULL, NULL}};
+	char line[MAX_BUFFER_SIZE], opcode[10] = {0}, argument[10] = {0};
 	unsigned int i = 0, inst_found = 0, scans = 0, n = 1;
 	FILE *file;
 
@@ -33,9 +34,14 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
-	while (fgets(line, 10, file))
+	while (fgets(line, sizeof(line), file))
 	{
-		scans = sscanf(line, " %s %s", opcode, argument);
+		if (line[0] == '\n')
+		{
+			n++;
+			continue;
+		}
+		scans = sscanf(line, " %s%*[ ]%s ", opcode, argument);
 		if (strlen(argument) > 0)
 		{
 
@@ -45,6 +51,11 @@ int main(int argc, char **argv)
 		{
 			while (instructions[i].opcode != NULL)
 			{
+				if (strcmp("push", instructions[i].opcode) == 0 && scans == 1)
+				{
+					fprintf(stderr, "L%d: usage: push integer\n", n);
+					exit(EXIT_FAILURE);
+				}
 				if (strcmp(opcode, instructions[i].opcode) == 0)
 				{
 					instructions[i].f(&stack, n);
