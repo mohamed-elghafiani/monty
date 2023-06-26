@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "monty.h"
 
 /**
@@ -9,16 +10,20 @@
  * @line_number: the line number the opcode is written in the monty file
  * Return: Nothing
  */
-void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
+void pall(stack_t **stack, int arg, __attribute__((unused)) unsigned int line_number)
 {
-	if (!*stack)
+	stack_t *tmp;
+	(void) arg;
+
+	tmp = *stack;
+	if (!tmp)
 	{
 		return;
 	}
-	while ((*stack)->next)
+	while (tmp->next)
 	{
-		printf("%d\n", (*stack)->n);
-		*stack = (*stack)->next;
+		printf("%d\n", tmp->n);
+		tmp = tmp->next;
 	}
-	printf("%d\n", (*stack)->n);
+	printf("%d\n", tmp->n);
 }

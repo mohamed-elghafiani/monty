@@ -4,7 +4,7 @@
 #include "monty.h"
 #define MAX_BUFFER_SIZE 256
 
-int node_integer;
+int arg;
 
 /**
  * main - main dunction of the program
@@ -19,8 +19,9 @@ int main(int argc, char **argv)
 	stack_t *stack = NULL;
 	instruction_t instructions[] = {{"push", push}, {"pall", pall},
 		{"pint", pint}, {"pop", pop}, {NULL, NULL}};
-	char line[MAX_BUFFER_SIZE], opcode[10] = {0}, argument[10] = {0};
-	unsigned int i = 0, inst_found = 0, scans = 0, n = 1;
+	char line[MAX_BUFFER_SIZE], *opcode;
+	unsigned int i = 0, n = 1;
+	int arg, m;
 	FILE *file;
 
 	if (argc != 2)
@@ -34,47 +35,40 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
-	while (fgets(line, sizeof(line), file))
+	while (fgets(line, MAX_BUFFER_SIZE, file) != NULL)
 	{
+		i = 0;
 		if (line[0] == '\n')
 		{
 			n++;
 			continue;
 		}
-		scans = sscanf(line, " %s%*[ ]%s ", opcode, argument);
-		if (strlen(argument) > 0)
+		m = get_operation(line, &opcode, &arg);
+		if (m == -1)
 		{
-
-			node_integer = atoi(argument);
+			n++;
+			continue;
 		}
-		if (scans >= 1)
+		if (m == 1)
 		{
-			while (instructions[i].opcode != NULL)
+			fprintf(stderr, "L%d: usage: push integer\n", n);
+			exit(EXIT_FAILURE);
+		}
+		if (m == 2)
+		{
+			fprintf(stderr, "L%d: unknown instruction %s\n", n, opcode);
+			free_stack(stack);
+			fclose(file);
+			exit(EXIT_FAILURE);
+		}
+		while (instructions[i].opcode != NULL)
+		{
+			if (strcmp(opcode, instructions[i].opcode) == 0)
 			{
-				if (strcmp("push", instructions[i].opcode) == 0 && scans == 1)
-				{
-					fprintf(stderr, "L%d: usage: push integer\n", n);
-					exit(EXIT_FAILURE);
-				}
-				if (strcmp(opcode, instructions[i].opcode) == 0)
-				{
-					instructions[i].f(&stack, n);
-					inst_found = 1;
-					break;
-				}
-				i++;
+				instructions[i].f(&stack, arg, n);
+				break;
 			}
-			if (inst_found == 0)
-			{
-				fprintf(stderr, "L%d: unknown instruction %s\n", n, opcode);
-				free_stack(stack);
-				fclose(file);
-				exit(EXIT_FAILURE);
-			}
-			memset(opcode, 0, 10);
-			memset(argument, 0, 10);
-			i = 0;
-			inst_found = 0;
+			i++;
 		}
 		n++;
 	}

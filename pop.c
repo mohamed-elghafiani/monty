@@ -9,9 +9,10 @@
  * @line_number: the line number the opcode is written in the monty file
  * Return: Nothing
  */
-void pop(stack_t **stack, unsigned int line_number)
+void pop(stack_t **stack, int arg, unsigned int line_number)
 {
 	stack_t *current;
+	(void) arg;
 
 	if (*stack == NULL)
 	{
