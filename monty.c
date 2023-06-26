@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 {
 	stack_t *stack = NULL;
 	instruction_t instructions[] = {{"push", push}, {"pall", pall},
-		{"pint", pint}, {"pop", pop}, {NULL, NULL}};
+		{"pint", pint}, {"pop", pop}, {"nop", nop}, {NULL, NULL}};
 	char line[MAX_BUFFER_SIZE], *opcode;
 	unsigned int i = 0, n = 1;
 	int arg, m;
